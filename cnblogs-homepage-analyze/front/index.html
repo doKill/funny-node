@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    div {
+        width: 90%;
+        margin: 10px auto;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        <canvas id="canvas"></canvas>
+    </div>
+    <script src="chart.js"></script>
+    <script type="text/javascript">
+    window.onload = function() {
+        
+        var ctx = document.getElementById("canvas").getContext("2d");
+        //哪个时辰发文章阅读量高
+        window.fetch = function(data) {
+            var hours = [],
+                sum = [];
+            for (var i = 0; i < 24; i++)
+                hours[i] = sum[i] = 0;
+            for (var i = 0, len = data.length; i < len; i++) {
+                var postHour = +data[i].time,
+                    viewTimes = +data[i].views;
+                // 阈值 2000
+                if (viewTimes > 2000)
+                    continue;
+                hours[postHour]++;
+                sum[postHour] += viewTimes;
+            }
+            var barChartData = {
+                labels: ["0点", "1点", "2点", "3点", "4点", "5点", "6点", "7点", "8点", "9点", "10点", "11点", "12点", "13点", "14点", "15点", "16点", "17点", "18点", "19点", "20点", "21点", "22点", "23点"],
+                datasets: [{
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,0.8)",
+                    highlightFill: "rgba(220,220,220,0.75)",
+                    highlightStroke: "rgba(220,220,220,1)",
+                    data: []
+                }]
+            };
+            for (var i = 0; i < 24; i++)
+                barChartData.datasets[0].data.push(~~(sum[i] / hours[i]));
+            window.myBar = new Chart(ctx).Bar(barChartData, {
+                responsive: true
+            });
+        }
+
+        var s = document.createElement("script");
+        s.src = "http://192.168.1.103:3000/getInfo?callback=fetch",
+            document.body.appendChild(s);
+
+    };
+    </script>
+</body>
+
+</html>
