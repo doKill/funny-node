@@ -1,0 +1,14 @@
+{
+  "name": "9.e-mail",
+  "version": "1.0.0",
+  "description": "详情：https://nodemailer.com/about/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemailer": "^4.3.1"
+  }
+}
